@@ -37,30 +37,66 @@ class _LeaderBoardState extends State<LeaderBoard> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      "Region:".text.bold.sm.make(),
-                      10.widthBox,
-                      ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.black54)),
+                  padding: const EdgeInsets.all(8.0),
+                  child: FutureBuilder(
+                    future: Provider.of<ApiControler>(context).fetchResource(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Container(
+                          child: Row(
+                            children: [
+                              const Spacer(),
+                              "Region:".text.bold.sm.make(),
+                              10.widthBox,
+                              ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        side: const BorderSide(
+                                            width: 1, color: Colors.black54)),
+                                  ),
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.blue,
+                                  ),
+                                  label:
+                                      "${value.regionx}".text.blue800.sm.make())
+                            ],
                           ),
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.location_on_rounded,
-                            color: Colors.blue,
-                          ),
-                          label: "${value.regionx}".text.blue800.sm.make())
-                    ],
+                        );
+                      }
+                    },
+                  )
+
+                  // Container(
+                  //   child: Row(
+                  //     children: [
+                  //       const Spacer(),
+                  //       "Region:".text.bold.sm.make(),
+                  //       10.widthBox,
+                  //       ElevatedButton.icon(
+                  //           style: ElevatedButton.styleFrom(
+                  //             shape: RoundedRectangleBorder(
+                  //                 borderRadius: BorderRadius.circular(10.0),
+                  //                 side: const BorderSide(
+                  //                     width: 1, color: Colors.black54)),
+                  //           ),
+                  //           onPressed: () {},
+                  //           icon: const Icon(
+                  //             Icons.location_on_rounded,
+                  //             color: Colors.blue,
+                  //           ),
+                  //           label: "${value.regionx}".text.blue800.sm.make())
+                  //     ],
+                  //   ),
+                  // ),
                   ),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: SizedBox(

@@ -12,7 +12,7 @@ class ApiControler extends ChangeNotifier {
   String? regionx;
   dynamic regionhive;
 
-  Future fetchResource() async {
+  Future<dynamic> fetchResource() async {
     final url = Uri.parse(
         "https://run.mocky.io/v3/078310bd-5004-4d1e-af40-65917daa6eeb");
     try {
@@ -21,8 +21,8 @@ class ApiControler extends ChangeNotifier {
         final getmodel = getModelsFromJson(response.body);
         data.add(getmodel);
         regionx = getmodel.region;
-
         saveDataToHive(getmodel);
+        return data;
       } else {
         throw Exception('Failed to load ${response.statusCode}');
       }
