@@ -1,12 +1,25 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, use_key_in_widget_constructors, unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:leaderboardapp/controller/api_integrat.dart';
+import 'package:leaderboardapp/view/leadership/leaderbar.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class LeaderBoard extends StatelessWidget {
+class LeaderBoard extends StatefulWidget {
   const LeaderBoard({Key? key});
+
+  @override
+  State<LeaderBoard> createState() => _LeaderBoardState();
+}
+
+class _LeaderBoardState extends State<LeaderBoard> {
+  @override
+  void initState() {
+    Provider.of<ApiControler>(context, listen: false).fetchResource();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,40 +36,63 @@ class LeaderBoard extends StatelessWidget {
         return SafeArea(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      "Region:".text.bold.sm.make(),
-                      10.widthBox,
-                      ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.black54)),
-                          ),
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.location_on_rounded,
-                            color: Colors.blue,
-                          ),
-                          label: "$plasce".text.blue800.sm.make())
-                    ],
-                  ),
-                ),
+              FutureBuilder(
+                future: Provider.of<ApiControler>(context, listen: false)
+                    .fetchResource(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: "Error ${snapshot.error}".text.make(),
+                    );
+                  } else {
+                     final data = Provider.of<ApiControler>(context,
+                                        listen: false)
+                                    .data[0];
+                                    
+
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            "Region:".text.bold.sm.make(),
+                            10.widthBox,
+                            ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      side: const BorderSide(
+                                          width: 1, color: Colors.black54)),
+                                ),
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.location_on_rounded,
+                                  color: Colors.blue,
+                                ),
+                                label:
+                                    "${value.regionx}".text.blue800.sm.make())
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Container(
                   width: mediaquery.width,
-                  height: mediaquery.height * .26,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Colors.red,
-                  ),
+                  height: mediaquery.height * .3,
+                  // decoration: const BoxDecoration(
+                  //   borderRadius: BorderRadius.all(Radius.circular(20)),
+                  //   color: Colors.red,
+                  // ),c
+                  child: const StatusBar(),
                 ),
               ),
               10.heightBox,
@@ -91,7 +127,7 @@ class LeaderBoard extends StatelessWidget {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               } else if (snapshot.hasError) {
@@ -102,6 +138,7 @@ class LeaderBoard extends StatelessWidget {
                                 final data = Provider.of<ApiControler>(context,
                                         listen: false)
                                     .data[0];
+                                // value.regionx = data.region;
                                 final plasce = data.region;
                                 final leaderss = data.leaders;
                                 // final leaderss = snapshot.data!;

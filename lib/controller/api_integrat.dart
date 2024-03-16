@@ -35,6 +35,7 @@ import 'package:leaderboardapp/model/leadermodel/leader_model.dart';
 
 class ApiControler extends ChangeNotifier {
   List<GetModels> data = [];
+  String? regionx;
 
   Future fetchResource() async {
     final url = Uri.parse(
@@ -44,10 +45,12 @@ class ApiControler extends ChangeNotifier {
       if (response.statusCode == 200) {
         final getmodel = getModelsFromJson(response.body);
         data.add(getmodel);
+        regionx = getmodel.region;
         // final datas = jsonDecode(response.body)["leader"] as List<dynamic>;
         // final leaders = datas.map((e) => Leader.fromJson(e)).toList();
         // data = leaders;
         // return leaders;
+        
       } else {
         throw Exception('Failed to load ${response.statusCode}');
       }
