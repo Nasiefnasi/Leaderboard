@@ -1,30 +1,3 @@
-// class Leader {
-//   final String? userId;
-//   final String? name;
-//   final String? profilePic;
-//   final int? points;
-//   final String? region;
-//   Leader({
-//     this.userId,
-//     this.name,
-//     this.profilePic,
-//     this.points,
-//     this.region,
-//   });
-//   factory Leader.fromJson(Map<String, dynamic> map) {
-//     return Leader(
-//         userId: map["userId"],
-//         name: map["name"],
-//         profilePic: map["profilePic"],
-//         points: map["point"],
-//         region: map["region"]);
-//   }
-// }
-
-// To parse this JSON data, do
-//
-//     final getModels = getModelsFromJson(jsonString);
-
 import 'dart:convert';
 
 GetModels getModelsFromJson(String str) => GetModels.fromJson(json.decode(str));
